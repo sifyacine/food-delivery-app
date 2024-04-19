@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fooddeliveryapp/components/my_button.dart';
 import 'package:fooddeliveryapp/components/my_textfield.dart';
 
+import 'home_page.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key, required this.onTab}) : super(key: key);
   final void Function()? onTab;
@@ -15,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController passwordController = TextEditingController();
 
   /// login method
-  void login(){
+  void login() {
     /*
 
     fill out authentication here ...
@@ -23,7 +25,11 @@ class _LoginPageState extends State<LoginPage> {
     */
 
     /// Navigate to home page
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage(),));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomePage(),
+        ));
   }
 
   @override
@@ -96,7 +102,8 @@ class _LoginPageState extends State<LoginPage> {
                   child: Text(
                     ' register now',
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary, fontWeight: FontWeight.bold),
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
