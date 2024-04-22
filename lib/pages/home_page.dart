@@ -4,6 +4,8 @@ import 'package:fooddeliveryapp/components/my_description_box.dart';
 import 'package:fooddeliveryapp/components/my_drawer.dart';
 import 'package:fooddeliveryapp/components/my_sliver-app_bar.dart';
 
+import '../components/my_tab_bar.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -11,7 +13,23 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  /// tab bar controller
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    // ToDo: implement initState
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,22 +38,34 @@ class _HomePageState extends State<HomePage> {
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           MySliverAppBar(
-            title: const Text('text'),
+            title: MyTabBar(
+              tabController: _tabController,
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Divider(indent: 25, endIndent: 25, color: Theme.of(context).colorScheme.secondary,),
+                Divider(
+                  indent: 25,
+                  endIndent: 25,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+
                 /// my current location
-                MyCurrentLocation(),
+                const MyCurrentLocation(),
 
                 /// description box
-                MyDescriptionBox(),
+                const MyDescriptionBox(),
               ],
             ),
           ),
         ],
-        body: Container(
-          color: Colors.blue,
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            Center(child: Text("hello")),
+            Center(child: Text("hhhhhhhhhhh")),
+            Center(child: Text("haaaaaaaaaaaaa")),
+          ],
         ),
       ),
     );
