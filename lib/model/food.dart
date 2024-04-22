@@ -19,16 +19,16 @@ class Food {
 /// food categories
 enum FoodCategory {
   burgers,
-  salades,
+  salads,
   sides,
-  deserts,
+  desserts,
   drinks,
 }
 
 /// food addons
 class Addons {
   String name;
-  double addons;
+  double price;
 
-  Addons({required this.name, required this.addons});
+  Addons({required this.name, required this.price});
 }
