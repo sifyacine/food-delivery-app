@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
+
 import 'food.dart';
 
-class Restaurant {
+class Restaurant extends ChangeNotifier{
   /// list of food menu
   final List<Food> _menu = [
     Food(
@@ -143,6 +145,7 @@ class Restaurant {
         Addons(name: 'Peppermint Flavor', price: 0.69 ),
       ],
     ),
+
     /// salads
     Food(
       name: "Caesar Salad",
@@ -355,5 +358,45 @@ class Restaurant {
         Addons(name: 'Whipped Cream', price: 0.49 ),
       ],
     ),
+
+
   ];
+  /*
+
+    G E T T E R S
+
+    */
+
+  List<Food> get menu => _menu;
+
+    /*
+
+    O P E R A T I O N S
+
+    */
+
+    // add to cart
+
+    // remove from cart
+
+    // get total price of cart
+
+    // get total number of items in the cart
+
+    // clear cart
+
+
+
+    /*
+
+        H E L P E R S
+
+        */
+
+    // generate a receipt
+
+    // format double value into meney
+
+    // format list addons into string summery
+
 }

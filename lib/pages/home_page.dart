@@ -3,6 +3,9 @@ import 'package:fooddeliveryapp/components/my_current_location.dart';
 import 'package:fooddeliveryapp/components/my_description_box.dart';
 import 'package:fooddeliveryapp/components/my_drawer.dart';
 import 'package:fooddeliveryapp/components/my_sliver-app_bar.dart';
+import 'package:fooddeliveryapp/model/food.dart';
+import 'package:fooddeliveryapp/model/restaurant.dart';
+import 'package:provider/provider.dart';
 
 import '../components/my_tab_bar.dart';
 
@@ -13,7 +16,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
   /// tab bar controller
   late TabController _tabController;
 
@@ -21,7 +25,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   void initState() {
     // ToDo: implement initState
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController =
+        TabController(length: FoodCategory.values.length, vsync: this);
   }
 
   @override
@@ -29,6 +34,29 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     _tabController.dispose();
     super.dispose();
   }
+
+  /// sort out and return a list of food items that belong to a specific category
+  List<Food> _filterMenuByCategory(FoodCategory category, List<Food> fullMenu) {
+    return fullMenu.where((food) => food.category == category).toList();
+  }
+
+  /// return list of food in given category
+  List<Widget> getFoodInThisCategory(List<Food> fullMenu) {
+    return FoodCategory.values.map<Widget>((category) {
+      List<Food> categoryMenu = _filterMenuByCategory(category, fullMenu);
+
+      return ListView.builder(
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(categoryMenu[index].name),
+          );
+        },
+        itemCount: categoryMenu.length,
+        physics: const NeverScrollableScrollPhysics(),
+      );
+    }).toList();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +87,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             ),
           ),
         ],
-        body: TabBarView(
-          controller: _tabController,
-          children: [
-            Center(child: Text("hello")),
-            Center(child: Text("hhhhhhhhhhh")),
-            Center(child: Text("haaaaaaaaaaaaa")),
-          ],
-        ),
+        body: Consumer<Restaurant> (
+          builder: (context, restaurant, child) => TabBarView(
+            controller: _tabController,
+            children: getFoodInThisCategory(restaurant.menu),
+          ),
+        )
       ),
     );
   }
