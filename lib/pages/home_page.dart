@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:fooddeliveryapp/components/my_current_location.dart';
 import 'package:fooddeliveryapp/components/my_description_box.dart';
 import 'package:fooddeliveryapp/components/my_drawer.dart';
+import 'package:fooddeliveryapp/components/my_food_tile.dart';
 import 'package:fooddeliveryapp/components/my_sliver-app_bar.dart';
 import 'package:fooddeliveryapp/model/food.dart';
 import 'package:fooddeliveryapp/model/restaurant.dart';
+import 'package:fooddeliveryapp/pages/food_page.dart';
 import 'package:provider/provider.dart';
 
 import '../components/my_tab_bar.dart';
@@ -47,8 +49,13 @@ class _HomePageState extends State<HomePage>
 
       return ListView.builder(
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(categoryMenu[index].name),
+          /// get individual food
+          final food = categoryMenu[index];
+
+          /// return food tile
+          return FoodTile(
+            food: food,
+            onTab: () => Navigator.push(context, MaterialPageRoute(builder: (context) => FoodPage(food: food))),
           );
         },
         itemCount: categoryMenu.length,
@@ -57,43 +64,41 @@ class _HomePageState extends State<HomePage>
     }).toList();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       drawer: const MyDrawer(),
       body: NestedScrollView(
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          MySliverAppBar(
-            title: MyTabBar(
-              tabController: _tabController,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Divider(
-                  indent: 25,
-                  endIndent: 25,
-                  color: Theme.of(context).colorScheme.secondary,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                MySliverAppBar(
+                  title: MyTabBar(
+                    tabController: _tabController,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Divider(
+                        indent: 25,
+                        endIndent: 25,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+
+                      /// my current location
+                      const MyCurrentLocation(),
+
+                      /// description box
+                      const MyDescriptionBox(),
+                    ],
+                  ),
                 ),
-
-                /// my current location
-                const MyCurrentLocation(),
-
-                /// description box
-                const MyDescriptionBox(),
               ],
+          body: Consumer<Restaurant>(
+            builder: (context, restaurant, child) => TabBarView(
+              controller: _tabController,
+              children: getFoodInThisCategory(restaurant.menu),
             ),
-          ),
-        ],
-        body: Consumer<Restaurant> (
-          builder: (context, restaurant, child) => TabBarView(
-            controller: _tabController,
-            children: getFoodInThisCategory(restaurant.menu),
-          ),
-        )
-      ),
+          )),
     );
   }
 }
