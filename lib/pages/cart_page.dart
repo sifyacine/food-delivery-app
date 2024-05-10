@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fooddeliveryapp/components/my_button.dart';
 import 'package:fooddeliveryapp/components/my_cart_tile.dart';
 import 'package:fooddeliveryapp/model/restaurant.dart';
+import 'package:fooddeliveryapp/pages/payment_page.dart';
 import 'package:provider/provider.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,18 +54,27 @@ class CartPage extends StatelessWidget {
         body: Column(
           children: [
             userCart.isEmpty
-                ? const Center(child: Text('No item in the cart'))
+                ? const Expanded(
+                    child: Center(child: Text('No item in the cart')))
                 : Expanded(
                     child: ListView.builder(
-                        itemCount: userCart.length, // Add this line
-                        itemBuilder: (context, index) {
-                          /// get individual cart item
-                          final cartItem = userCart[index];
+                      itemCount: userCart.length, // Add this line
+                      itemBuilder: (context, index) {
+                        /// get individual cart item
+                        final cartItem = userCart[index];
 
-                          /// return cart tile ui
-                          return MyCartTile(cartItem: cartItem);
-                        }),
+                        /// return cart tile ui
+                        return MyCartTile(cartItem: cartItem);
+                      },
+                    ),
                   ),
+
+
+            /// check out button
+            MyButton(text: 'Checkout', onTab: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentPage())),),
+
+            /// size
+            const SizedBox(height: 25,),
           ],
         ),
       );
